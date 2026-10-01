@@ -220,7 +220,7 @@
   </div>
 
   <div class="counter">
-    you are visitor number <span class="digits" id="count">000003</span><br>
+    you are visitor number <span class="digits" id="count">......</span><br>
     <span class="construction"><b>🚧 site under construction forever 🚧</b></span>
   </div>
 
@@ -235,8 +235,22 @@
 <audio id="boom" src="img/vine_boom.mp3" preload="auto"></audio>
 
 <script>
-  // fake visitor counter (it's always low. vibes only)
-  document.getElementById("count").textContent = String(3 + Math.floor(Math.random() * 40)).padStart(6, "0");
+  // real visitor counter: each browser counts once, refreshing doesn't add more
+  // (free counter at abacus.jasoncameron.dev, no account needed)
+  (async () => {
+    const count = document.getElementById("count");
+    let seen = false;
+    try { seen = localStorage.getItem("fnf-visited") === "1"; } catch {}
+    try {
+      const res = await fetch(`https://abacus.jasoncameron.dev/${seen ? "get" : "hit"}/fnf-launcher-web/visitors`);
+      const { value } = await res.json();
+      if (typeof value !== "number") throw new Error("no count");
+      count.textContent = String(value).padStart(6, "0");
+      try { localStorage.setItem("fnf-visited", "1"); } catch {}
+    } catch {
+      count.textContent = "??????";
+    }
+  })();
 
   // click pics to make big
   const lightbox = document.getElementById("lightbox");
