@@ -8,7 +8,7 @@
 <meta property="og:title" content="fnf launcher (real)">
 <meta property="og:description" content="it launches fnf mods. on linux. with a controller. the orange is watching.">
 <meta property="og:image" content="img/cover.png">
-<link rel="icon" href="img/orange.png">
+<link rel="icon" href="img/real-orang.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Luckiest+Guy&family=VT323&display=swap" rel="stylesheet">
@@ -30,7 +30,7 @@
     font-family: "Comic Neue", "Comic Sans MS", cursive;
     font-size: 1.15rem;
     color: var(--ink);
-    background: var(--bg) url("img/orange.png") 0 0 / 70px;
+    background: var(--bg) url("img/real-orang.png") 0 0 / 70px;
     background-blend-mode: soft-light;
     overflow-x: hidden;
     cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text y='26' font-size='26'>🍊</text></svg>") 4 4, auto;
@@ -211,7 +211,7 @@
   </div>
 
   <div class="box tilt-r" style="text-align: center;">
-    <img src="img/orange.png" alt="the orange" style="width: 110px; margin: 0 auto;">
+    <img src="img/real-orang.png" alt="the orange" style="width: 110px; margin: 0 auto;">
     <h2>faq</h2>
     <p><b>q: why is there an orange</b><br>a: there has always been an orange</p>
     <p><b>q: does it come with fnf / mods</b><br>a: no, it's a launcher. it launches. you bring the mods (or download them in it)</p>
@@ -248,13 +248,13 @@
   });
   lightbox.addEventListener("click", () => lightbox.classList.remove("open"));
 
-  // type "orang" anywhere. you know what happens
+  // type "fafa" anywhere. you know what happens
   let typed = "";
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") lightbox.classList.remove("open");
     if (e.key.length !== 1) return;
-    typed = (typed + e.key.toLowerCase()).slice(-5);
-    if (typed !== "orang") return;
+    typed = (typed + e.key.toLowerCase()).slice(-4);
+    if (typed !== "fafa") return;
     typed = "";
     const scare = document.getElementById("jumpscare");
     const boom = document.getElementById("boom");
