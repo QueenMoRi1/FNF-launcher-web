@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>fnf launcher (real)</title>
+<meta name="description" content="a friday night funkin mod launcher for linux. it launches mods. there is an orange.">
+<meta property="og:title" content="fnf launcher (real)">
+<meta property="og:description" content="it launches fnf mods. on linux. with a controller. the orange is watching.">
+<meta property="og:image" content="img/cover.png">
+<link rel="icon" href="img/orange.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Luckiest+Guy&family=VT323&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ff4fa3;
+    --paper: #fffbe6;
+    --ink: #111;
+    --yellow: #fdd835;
+    --purple: #9271fd;
+    --left: #c24b99;
+    --down: #00e5ff;
+    --up: #12fa05;
+    --right: #f9393f;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Comic Neue", "Comic Sans MS", cursive;
+    font-size: 1.15rem;
+    color: var(--ink);
+    background: var(--bg) url("img/orange.png") 0 0 / 70px;
+    background-blend-mode: soft-light;
+    overflow-x: hidden;
+    cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text y='26' font-size='26'>🍊</text></svg>") 4 4, auto;
+  }
+  img { max-width: 100%; display: block; }
+  a { color: #0000ee; }
+  a:visited { color: #551a8b; }
+  .page { width: min(860px, 100% - 24px); margin: 24px auto 60px; }
+
+  .box {
+    background: var(--paper);
+    border: 3px solid var(--ink);
+    padding: 20px 22px;
+    margin: 26px 0;
+    box-shadow: 6px 6px 0 var(--ink);
+  }
+  .tilt-l { transform: rotate(-1.2deg); }
+  .tilt-r { transform: rotate(1deg); }
+  h1, h2 { font-family: "Luckiest Guy", "Impact", sans-serif; letter-spacing: 1px; margin: 0 0 8px; line-height: 1.1; }
+  h2 { font-size: 2rem; }
+  h2 small { font-family: "Comic Neue", cursive; font-size: 1rem; letter-spacing: 0; opacity: 0.6; }
+  .vcr { font-family: "VT323", monospace; }
+
+  marquee, .scroll {
+    display: block; overflow: hidden; white-space: nowrap;
+    background: var(--yellow); border: 3px solid var(--ink);
+    font-family: "VT323", monospace; font-size: 1.5rem; padding: 4px 0;
+  }
+  .scroll span { display: inline-block; padding-left: 20px; animation: scroll 22s linear infinite; }
+  @keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  .hero { position: relative; text-align: center; }
+  .hero .logo { width: min(520px, 100%); margin: 0 auto; transform: rotate(-3deg); animation: bop 588ms infinite; }
+  @keyframes bop { 0% { transform: rotate(-3deg) scale(1.05); } 35%, 100% { transform: rotate(-3deg) scale(1); } }
+  .hero p { font-size: 1.35rem; margin: 6px 0; }
+  .sticker {
+    position: absolute; font-family: "Luckiest Guy", sans-serif; font-size: 1.1rem;
+    background: var(--yellow); border: 3px solid var(--ink); border-radius: 50%;
+    width: 120px; height: 120px; display: grid; place-items: center; text-align: center; line-height: 1.05;
+    padding: 12px; box-shadow: 4px 4px 0 var(--ink);
+  }
+  .sticker.one { top: -10px; right: -20px; transform: rotate(14deg); animation: spin 8s linear infinite; }
+  .sticker.two { bottom: 10px; left: -24px; transform: rotate(-12deg); background: var(--down); }
+  @keyframes spin { to { transform: rotate(374deg); } }
+  @media (max-width: 640px) { .sticker { display: none; } }
+
+  .big-button {
+    display: inline-block; margin: 18px 8px 6px;
+    font-family: "Luckiest Guy", sans-serif; font-size: 1.8rem; letter-spacing: 1px;
+    color: var(--ink); text-decoration: none;
+    background: var(--up); border: 4px solid var(--ink); padding: 14px 26px 10px;
+    box-shadow: 6px 6px 0 var(--ink); transform: rotate(-2deg);
+    animation: wobble 1.4s ease-in-out infinite;
+  }
+  .big-button.alt { background: var(--paper); font-size: 1.3rem; animation: none; transform: rotate(2deg); }
+  .big-button:hover { background: var(--yellow); }
+  @keyframes wobble { 50% { transform: rotate(2deg) scale(1.04); } }
+
+  .shots { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; }
+  .shots figure { margin: 0; background: #fff; border: 3px solid var(--ink); padding: 8px 8px 4px; box-shadow: 4px 4px 0 var(--ink); }
+  .shots figure:nth-child(odd) { transform: rotate(-2deg); }
+  .shots figure:nth-child(even) { transform: rotate(1.5deg); }
+  .shots figure:hover { transform: rotate(0) scale(1.04); z-index: 2; position: relative; }
+  .shots img { aspect-ratio: 16 / 9; object-fit: cover; width: 100%; border: 2px solid var(--ink); cursor: zoom-in; }
+  .shots figcaption { font-size: 1rem; padding-top: 4px; text-align: center; }
+
+  ul.dumb { padding-left: 1.2em; margin: 8px 0; }
+  ul.dumb li { margin: 6px 0; list-style: "🍊 "; }
+  .strike { text-decoration: line-through; opacity: 0.6; }
+
+  .note-row { display: flex; justify-content: center; gap: 12px; margin: 14px 0 4px; font-size: 2.3rem; }
+  .note-row span { display: inline-block; animation: hit 2352ms infinite; }
+  .note-row span:nth-child(2) { animation-delay: 588ms; }
+  .note-row span:nth-child(3) { animation-delay: 1176ms; }
+  .note-row span:nth-child(4) { animation-delay: 1764ms; }
+  @keyframes hit { 0% { transform: translateY(-10px) scale(1.3); } 15%, 100% { transform: none; } }
+
+  .itch-embed { border: 3px dashed var(--ink); padding: 18px; text-align: center; margin-top: 14px; background: #fff; }
+
+  table { border-collapse: collapse; margin: 10px 0; }
+  td { border: 2px solid var(--ink); padding: 4px 12px; background: #fff; }
+
+  .counter { text-align: center; font-size: 1rem; }
+  .counter .digits { font-family: "VT323", monospace; font-size: 1.8rem; background: #000; color: var(--up); padding: 0 8px; letter-spacing: 4px; border: 2px inset #888; }
+
+  footer { text-align: center; font-size: 0.95rem; }
+  .construction {
+    display: inline-block; padding: 4px 14px; margin: 10px 0;
+    background: repeating-linear-gradient(45deg, var(--yellow) 0 14px, var(--ink) 14px 28px);
+    border: 3px solid var(--ink);
+  }
+  .construction b { background: var(--yellow); padding: 0 8px; font-family: "VT323", monospace; font-size: 1.4rem; }
+
+  .lightbox { position: fixed; inset: 0; z-index: 50; display: none; place-items: center; background: rgba(0,0,0,0.85); padding: 20px; cursor: zoom-out; }
+  .lightbox.open { display: grid; }
+  .lightbox img { max-height: 90vh; border: 4px solid #fff; }
+
+  .jumpscare { position: fixed; inset: 0; z-index: 100; background: #000; display: none; place-items: center; }
+  .jumpscare.on { display: grid; animation: shake 60ms 10 alternate; }
+  .jumpscare img { width: min(80vh, 90vw); animation: pop 140ms cubic-bezier(.2, 1.6, .5, 1) both; }
+  @keyframes pop { from { transform: scale(0.3); } to { transform: scale(1); } }
+  @keyframes shake { from { transform: translate(-14px, 8px); } to { transform: translate(14px, -8px); } }
+
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; } }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="scroll"><span>✨ welcome to the official fnf launcher website ✨ please wipe your feet ✨ the orang is watching ✨ downscroll superior ✨ no refunds (it's free) ✨ beep bop skee dah ✨ welcome to the official fnf launcher website ✨ please wipe your feet ✨ the orang is watching ✨ downscroll superior ✨ no refunds (it's free) ✨ beep bop skee dah ✨</span></div>
+
+  <div class="box hero tilt-l">
+    <div class="sticker one">100%<br>FREE!!</div>
+    <div class="sticker two">works on<br>my machine</div>
+    <img class="logo" src="img/logo.png" alt="friday night funkin launcher">
+    <p><b>it launches fnf mods.</b> that's the whole thing. on linux. with a controller.</p>
+    <p class="vcr" style="font-size: 1.4rem;">(and a lot of other stuff i got carried away with)</p>
+    <div class="note-row" aria-hidden="true"><span>⬅️</span><span>⬇️</span><span>⬆️</span><span>➡️</span></div>
+    <!-- TODO: put your itch.io link here -->
+    <a class="big-button" href="https://YOUR-NAME.itch.io/fnf-launcher">GIMME IT 🍊</a>
+    <!-- TODO: put your github link here -->
+    <a class="big-button alt" href="https://github.com/YOUR-NAME/fnf-launcher">nerd stuff (github)</a>
+  </div>
+
+  <div class="box tilt-r">
+    <h2>what does it do <small>(a list, because i'm organized)</small></h2>
+    <ul class="dumb">
+      <li>looks like fnf. has the intro. has the little alphabet letters. you're welcome</li>
+      <li>paste a gamebanana link → mod downloads, unzips, installs itself. queue like 10 of them, i don't care</li>
+      <li>runs the windows mods through GE-Proton so you don't have to learn what a wine prefix is</li>
+      <li>works with a controller. made it on a rog ally. it shows up in steam with real covers and everything</li>
+      <li>plays the instrumentals from your mods in the background like a little radio</li>
+      <li>grabs the mod's gamebanana art and slaps it in the background</li>
+      <li>shows your steam friends what you're playing. discord too. very social. very cool</li>
+      <li>has a steam skin if you hate fun</li>
+      <li class="strike">has a ps5 skin</li>
+      <li>has an orange</li>
+    </ul>
+  </div>
+
+  <div class="box tilt-l">
+    <h2>pics <small>(click to make big)</small></h2>
+    <div class="shots">
+      <figure><img src="screenshots/01-intro.png" alt="made by orang entertainment"><figcaption>the intro. very professional</figcaption></figure>
+      <figure><img src="screenshots/08-full-library.png" alt="a full library of mods"><figcaption>all my mods. tricky is screaming</figcaption></figure>
+      <figure><img src="screenshots/09-steam-library.png" alt="steam skin with mod covers"><figcaption>steam skin but with mods</figcaption></figure>
+      <figure><img src="screenshots/10-gamebanana-picker.png" alt="gamebanana search"><figcaption>finds the mod on gamebanana for you</figcaption></figure>
+      <figure><img src="screenshots/03-freeplay.png" alt="freeplay menu"><figcaption>the menu (it bops)</figcaption></figure>
+      <figure><img src="screenshots/05-downloads.png" alt="download queue"><figcaption>download queue go brrr</figcaption></figure>
+      <figure><img src="screenshots/04-steam-skin.png" alt="steam skin"><figcaption>steam skin for steam enjoyers</figcaption></figure>
+      <figure><img src="screenshots/07-installer.png" alt="installer"><figcaption>the installer. gf helps</figcaption></figure>
+      <figure><img src="screenshots/06-wheredyougo.png" alt="where did you go popup"><figcaption>don't leave it alone for an hour</figcaption></figure>
+      <figure><img src="screenshots/11-kris.png" alt="god damn it kris"><figcaption>type deltarune. go on</figcaption></figure>
+    </div>
+  </div>
+
+  <div class="box tilt-r">
+    <h2>how to get it <small>(3 steps, i counted)</small></h2>
+    <ol>
+      <li>download <code>FNF-Launcher-Installer.sh</code></li>
+      <li>double click it. if it opens as text: right click → properties → tick "is executable". computers are weird</li>
+      <li>press INSTALL. go get a snack. come back. funk</li>
+    </ol>
+    <p>you need: linux (64-bit), steam, internet. that's it. bazzite / steamos people are already good to go.</p>
+    <p class="vcr" style="font-size: 1.3rem;">doesn't work on windows. sorry. (not sorry)</p>
+    <!-- TODO: itch.io widget. On itch: Distribute → Embed game, copy the iframe, paste it here
+         instead of this box. e.g.
+         <iframe frameborder="0" src="https://itch.io/embed/0000000" width="552" height="167"></iframe> -->
+    <div class="itch-embed">[ itch.io widget goes here when i remember ]</div>
+  </div>
+
+  <div class="box tilt-l">
+    <h2>buttons</h2>
+    <table>
+      <tr><td>play</td><td>enter / A</td></tr>
+      <tr><td>edit a game</td><td>F2 / Y</td></tr>
+      <tr><td>friends</td><td>F3 / start</td></tr>
+      <tr><td>downloads</td><td>F4 / R3</td></tr>
+      <tr><td>rescan</td><td>F5 / X</td></tr>
+      <tr><td>settings</td><td>esc / B</td></tr>
+      <tr><td>secret stuff</td><td>type things 🤫</td></tr>
+    </table>
+  </div>
+
+  <div class="box tilt-r" style="text-align: center;">
+    <img src="img/orange.png" alt="the orange" style="width: 110px; margin: 0 auto;">
+    <h2>faq</h2>
+    <p><b>q: why is there an orange</b><br>a: there has always been an orange</p>
+    <p><b>q: does it come with fnf / mods</b><br>a: no, it's a launcher. it launches. you bring the mods (or download them in it)</p>
+    <p><b>q: a mod won't start</b><br>a: settings → open logs. or blame the mod. i do</p>
+    <p><b>q: is this affiliated with the funkin' crew / valve / discord / gamebanana</b><br>a: lol no</p>
+  </div>
+
+  <div class="counter">
+    you are visitor number <span class="digits" id="count">000003</span><br>
+    <span class="construction"><b>🚧 site under construction forever 🚧</b></span>
+  </div>
+
+  <footer>
+    <p>made by <b>orang entertainment</b> (me) · best viewed in netscape navigator at 800×600</p>
+    <p style="font-size: 0.85rem; opacity: 0.75;">friday night funkin' and its art/music belong to <a href="https://github.com/FunkinCrew/funkin">the funkin' crew</a>. GE-Proton by GloriousEggroll. built with godot. this is a fan thing. please don't sue me i have like 4 dollars</p>
+  </footer>
+</div>
+
+<div class="lightbox" id="lightbox"><img alt=""></div>
+<div class="jumpscare" id="jumpscare"><img src="img/orange.png" alt=""></div>
+<audio id="boom" src="img/vine_boom.mp3" preload="auto"></audio>
+
+<script>
+  // fake visitor counter (it's always low. vibes only)
+  document.getElementById("count").textContent = String(3 + Math.floor(Math.random() * 40)).padStart(6, "0");
+
+  // click pics to make big
+  const lightbox = document.getElementById("lightbox");
+  document.querySelectorAll(".shots img").forEach((img) => {
+    img.addEventListener("click", () => {
+      lightbox.querySelector("img").src = img.src;
+      lightbox.classList.add("open");
+    });
+  });
+  lightbox.addEventListener("click", () => lightbox.classList.remove("open"));
+
+  // type "orang" anywhere. you know what happens
+  let typed = "";
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") lightbox.classList.remove("open");
+    if (e.key.length !== 1) return;
+    typed = (typed + e.key.toLowerCase()).slice(-5);
+    if (typed !== "orang") return;
+    typed = "";
+    const scare = document.getElementById("jumpscare");
+    const boom = document.getElementById("boom");
+    boom.currentTime = 0;
+    boom.play().catch(() => {});
+    scare.classList.remove("on");
+    void scare.offsetWidth;
+    scare.classList.add("on");
+    setTimeout(() => scare.classList.remove("on"), 1400);
+  });
+</script>
+</body>
+</html>
